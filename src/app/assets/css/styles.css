@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.navbar{
+    backdrop-filter: blur(17px) saturate(0%);
+    -webkit-backdrop-filter: blur(17px) saturate(0%);
+    background-color: rgba(213, 55, 75, 0.8);
+    border-radius: 12px;
+    border: 1px solid rgba(209, 213, 219, 0.3);
+}
