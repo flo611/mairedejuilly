@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const articlesController = require('../controllers/articles.controller');
-const { verifyToken } = require('../middleware/authJwt');
+const { createArticle, getAllArticles } = require('../controllers/articles.controller');
+const roleMiddleware = require('../middleware/roleMiddleware');
 
-router.post('/', verifyToken, articlesController.create);
-router.get('/', articlesController.findAll);
-router.get('/:id', articlesController.findOne);
-router.put('/:id', verifyToken, articlesController.update);
-router.delete('/:id', verifyToken, articlesController.delete);
+// Route pour créer un article (exige d'être connecté et avoir le rôle approprié)
+router.post('/articles', roleMiddleware('ADMIN'), createArticle);
+
+// Route pour récupérer tous les articles
+router.get('/articles', getAllArticles);
 
 module.exports = router;

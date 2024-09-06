@@ -1,20 +1,19 @@
 const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const db = require('./models');
-
 const app = express();
-
-app.use(cors());
-app.use(bodyParser.json());
-
-app.use('/api/articles', require('./routes/article.routes'));
-// Ajoutez d'autres routes ici
-
 const PORT = process.env.PORT || 5000;
 
-db.sequelize.sync().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`);
-  });
+// Middleware pour le traitement du JSON
+app.use(express.json());
+
+// Importer les routes
+const authRoutes = require('./routes/auth.routes');
+const articleRoutes = require('./routes/article.routes');
+
+// Utiliser les routes avec les préfixes appropriés
+app.use('/auth', authRoutes);
+app.use('/articles', articleRoutes); // Assure-toi que le préfixe est correct
+
+// Démarrer le serveur
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
