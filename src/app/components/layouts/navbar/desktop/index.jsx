@@ -1,7 +1,8 @@
+"use client"
 import { useState } from "react";
 
 import Image from 'next/image'; // Ajoutez cette ligne en haut de votre fichier
-import '../../../../assets/css/styles.css'
+
 
 const NavbarDesktop = () => {
     const [showButton, setShowButton] = useState(false);

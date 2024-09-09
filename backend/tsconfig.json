@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es6",                         // La version de JavaScript cible
+    "module": "commonjs",                    // Le module système
+    "outDir": "./dist",                      // Le répertoire de sortie des fichiers compilés
+    "rootDir": "./src",                      // Le répertoire racine des fichiers TypeScript
+    "strict": true,                          // Activer les vérifications strictes
+    "esModuleInterop": true,                 // Pour l'importation des modules CommonJS
+    "skipLibCheck": true,                    // Ignorer la vérification des types des fichiers de définition
+    "forceConsistentCasingInFileNames": true // Assurer la cohérence des noms de fichiers
+  },
+  "include": ["src/**/*.ts"],                // Inclure les fichiers TypeScript
+  "exclude": ["node_modules"]                // Exclure les fichiers dans node_modules
+}

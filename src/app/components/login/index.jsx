@@ -1,65 +1,78 @@
-import React, { useState } from 'react';
+"use client"
+import { useState } from 'react';
+import axios from 'axios';
 
-const Login = ({ onLogin }) => {
+const Login = () => {
+  // State pour stocker les valeurs des champs du formulaire et les erreurs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  // Fonction pour gérer la soumission du formulaire
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Empêche le comportement par défaut du formulaire
 
-    // Requête vers le backend pour vérifier les identifiants
     try {
-      const response = await fetch('http://localhost:5000/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+      // Envoi des données au backend
+      const response = await axios.post('http://localhost:3008/auth/login', {
+        email,
+        password
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.setItem('token', data.token);
-        onLogin(); // Callback pour signaler que l'utilisateur est connecté
-      } else {
-        setError('Identifiants invalides');
-      }
-    } catch (error) {
-      console.error('Erreur lors de la connexion', error);
-      setError('Erreur lors de la connexion');
+      // Traitement de la réponse
+      setSuccess('Login successful!'); // Message de succès
+      setError(''); // Réinitialiser les erreurs
+      console.log(response.data); // Vous pouvez faire quelque chose avec les données de la réponse
+    } catch (err) {
+      // Traitement des erreurs
+      setError('Invalid credentials'); // Message d'erreur
+      setSuccess(''); // Réinitialiser le succès
+      console.error(err);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <form onSubmit={handleLogin} className="bg-white p-8 shadow-md rounded-md">
-        <h2 className="text-2xl font-bold mb-4">Se connecter</h2>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          className="border p-2 mb-4 w-full"
-          required
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Mot de passe"
-          className="border p-2 mb-4 w-full"
-          required
-        />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md">
-          Connexion
+    <div className="p-4">
+      <h1 className="text-xl font-bold mb-4 bg-red-700 text-white p-2">Login</h1>
+
+      {/* Afficher les messages de succès ou d'erreur */}
+      {success && <div className="text-green-500">{success}</div>}
+      {error && <div className="text-red-500">{error}</div>}
+
+      {/* Formulaire de connexion */}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="email" className="block mb-1 font-semibold">Email</label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="border border-gray-300 p-2 w-full"
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="password" className="block mb-1 font-semibold">Password</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border border-gray-300 p-2 w-full"
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white py-2 px-4 rounded"
+        >
+          Login
         </button>
-        {error && <p className="text-red-500 mt-2">{error}</p>}
       </form>
     </div>
   );
 };
 
 export default Login;
-
