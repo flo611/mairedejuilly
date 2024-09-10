@@ -1,21 +1,18 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 datasource db {
-  provider = "mysql" // Pour MySQL
-  url      = env("DATABASE_URL") // Utilise la chaîne de connexion définie dans .env
+  provider = "mysql" // Utilise MySQL comme base de données
+  url      = env("DATABASE_URL") // Utilise la chaîne de connexion définie dans le fichier .env
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client-js" // Génére le client Prisma en JavaScript
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
-  password String
-  role     String   @default("USER")
+  id       Int      @id @default(autoincrement()) // Clé primaire auto-incrémentée
+  email    String   @unique                      // Email unique
+  password String                               // Mot de passe haché
+  role     String   @default("ADMIN")             // Rôle par défaut ("ADMIN")
 }
