@@ -4,6 +4,8 @@ import jwt from 'jsonwebtoken';
 
 const prisma = new PrismaClient();
 
+
+
 // Fonction pour l'inscription
 export const registerUser = async (email: string, password: string, role: string) => {
   const hashedPassword = await bcrypt.hash(password, 10);

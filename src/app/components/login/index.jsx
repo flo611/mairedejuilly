@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -18,15 +18,30 @@ const Login = () => {
       const response = await axios.post('http://localhost:3008/auth/login', {
         email,
         password
+      }, {
+        withCredentials: true, // Si le backend utilise des cookies/sessions
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
 
-      // Traitement de la réponse
+      // Traitement de la réponse en cas de succès
       setSuccess('Login successful!'); // Message de succès
       setError(''); // Réinitialiser les erreurs
-      console.log(response.data); // Vous pouvez faire quelque chose avec les données de la réponse
+      console.log(response.data); // Vous pouvez faire quelque chose avec les données de la réponse, comme stocker le token
+
     } catch (err) {
       // Traitement des erreurs
-      setError('Invalid credentials'); // Message d'erreur
+      if (err.response) {
+        // La requête a été faite, mais le serveur a répondu avec un code de statut non compris entre 2xx
+        setError(err.response.data.error || 'Login failed, please try again.');
+      } else if (err.request) {
+        // La requête a été faite, mais aucune réponse n'a été reçue
+        setError('No response from the server. Please try again later.');
+      } else {
+        // Quelque chose s'est passé lors de la configuration de la requête qui a déclenché une erreur
+        setError('Error during the login process.');
+      }
       setSuccess(''); // Réinitialiser le succès
       console.error(err);
     }
