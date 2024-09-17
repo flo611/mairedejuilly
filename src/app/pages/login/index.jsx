@@ -1,6 +1,8 @@
 "use client";
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom'; // Import de useNavigate
 import axios from 'axios';
+
 
 const Login = () => {
   // State pour stocker les valeurs des champs du formulaire et les erreurs
@@ -8,45 +10,39 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  
+  const navigate = useNavigate(); // Initialise useNavigate
 
-  // Fonction pour gérer la soumission du formulaire
   const handleSubmit = async (event) => {
-    event.preventDefault(); // Empêche le comportement par défaut du formulaire
+    event.preventDefault();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+    if (!emailRegex.test(email)) {
+      setError('Email invalide');
+      return;
+    }
+
+    if (!passwordRegex.test(password)) {
+      setError('Le mot de passe doit comporter au moins 8 caractères, avec des lettres majuscules et minuscules, un chiffre et un caractère spécial');
+      return;
+    }
 
     try {
-      // Envoi des données au backend
-      const response = await axios.post('http://localhost:3008/auth/login', {
-        email,
-        password
-      }, {
-        withCredentials: true, // Si le backend utilise des cookies/sessions
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await axios.post('http://localhost:3008/auth/login', { email, password });
+      setSuccess('Login successful!');
+      setError('');
 
-      // Traitement de la réponse en cas de succès
-      setSuccess('Login successful!'); // Message de succès
-      setError(''); // Réinitialiser les erreurs
-      console.log(response.data); // Vous pouvez faire quelque chose avec les données de la réponse, comme stocker le token
-
+      // Utilise navigate pour rediriger vers le dashboard
+      navigate('/dashboard'); // Redirige vers le chemin correct
     } catch (err) {
-      // Traitement des erreurs
-      if (err.response) {
-        // La requête a été faite, mais le serveur a répondu avec un code de statut non compris entre 2xx
-        setError(err.response.data.error || 'Login failed, please try again.');
-      } else if (err.request) {
-        // La requête a été faite, mais aucune réponse n'a été reçue
-        setError('No response from the server. Please try again later.');
-      } else {
-        // Quelque chose s'est passé lors de la configuration de la requête qui a déclenché une erreur
-        setError('Error during the login process.');
-      }
-      setSuccess(''); // Réinitialiser le succès
+      setError('Invalid credentials');
+      setSuccess('');
       console.error(err);
     }
   };
-
+  
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4 bg-red-700 text-white p-2">Login</h1>

@@ -16,3 +16,18 @@ model User {
   password String                               // Mot de passe haché
   role     String   @default("ADMIN")             // Rôle par défaut ("ADMIN")
 }
+model Article {
+  id      Int     @id @default(autoincrement())
+  title   String  @db.VarChar(255)
+  content String  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model File {
+  id        Int      @id @default(autoincrement())
+  filename  String   @db.VarChar(255)
+  path      String   @db.VarChar(255)
+  mimetype  String   @db.VarChar(100)
+  size      Int
+  createdAt DateTime @default(now())
+}
