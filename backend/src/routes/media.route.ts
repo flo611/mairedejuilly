@@ -4,7 +4,18 @@ import multer from 'multer';
 import { uploadFile, getFiles, getFileById, deleteFile } from '../services/media.service';
 
 const router = express.Router();
-const upload = multer({ dest: 'uploads/' });
+
+// Configurez Multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  }
+});
+
+const upload = multer({ storage });
 
 router.use(cors({
   origin: 'http://localhost:3000',
@@ -14,60 +25,15 @@ router.use(cors({
 
 router.options('*', cors());
 
-router.post('/upload', upload.single('file'), async (req, res) => {
-  try {
-    const file = await uploadFile(req.file);
-    res.status(201).json(file);
-  }catch (error) {
-    if (error instanceof Error) {
-      res.status(500).json({ error: error.message });
-    } else {
-      res.status(500).json({ error: 'Unknown error occurred' });
-    }
+// Route pour l'upload de fichiers
+router.post('/upload', upload.single('file'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded' });
   }
-  
-});
-
-router.get('/files', async (req, res) => {
-  try {
-    const files = await getFiles();
-    res.status(200).json(files);
-  } catch (error) {
-    if (error instanceof Error) {
-      res.status(500).json({ error: error.message });
-    } else {
-      res.status(500).json({ error: 'Unknown error occurred' });
-    }
-  }
-  
-});
-
-router.get('/files/:id', async (req, res) => {
-  try {
-    const file = await getFileById(parseInt(req.params.id, 10));
-    res.status(200).json(file);
-  } catch (error) {
-    if (error instanceof Error) {
-      res.status(500).json({ error: error.message });
-    } else {
-      res.status(500).json({ error: 'Unknown error occurred' });
-    }
-  }
-  
-});
-
-router.delete('/files/:id', async (req, res) => {
-  try {
-    await deleteFile(parseInt(req.params.id, 10));
-    res.status(204).end();
-  }catch (error) {
-    if (error instanceof Error) {
-      res.status(500).json({ error: error.message });
-    } else {
-      res.status(500).json({ error: 'Unknown error occurred' });
-    }
-  }
-  
+  res.status(201).json({
+    message: 'File uploaded successfully',
+    file: req.file
+  });
 });
 
 export default router;

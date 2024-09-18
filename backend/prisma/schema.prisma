@@ -18,6 +18,7 @@ model User {
 }
 model Article {
   id      Int     @id @default(autoincrement())
+  categorie String @db.VarChar(255)
   title   String  @db.VarChar(255)
   content String  @db.Text
   createdAt DateTime @default(now())

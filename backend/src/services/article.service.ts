@@ -2,9 +2,9 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export const createArticle = async (title: string, content: string) => {
-  return prisma.Article.create({
-    data: { title, content },
+export const createArticle = async (title: string, content: string, categorie: string) => {
+  return prisma.article.create({
+    data: { title, content, categorie },
   });
 };
 
@@ -18,10 +18,10 @@ export const getArticleById = async (id: number) => {
   });
 };
 
-export const updateArticle = async (id: number, title: string, content: string) => {
+export const updateArticle = async (id: number, title: string, content: string, categorie: string) => {
   return prisma.article.update({
     where: { id },
-    data: { title, content },
+    data: { title, content, categorie },
   });
 };
 
