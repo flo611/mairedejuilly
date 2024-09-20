@@ -9,3 +9,25 @@
     border-radius: 12px;
     border: 1px solid rgba(209, 213, 219, 0.3);
 }
+
+#hamburger .line-1,
+#hamburger .line-2 {
+    position: relative;
+    width: 24px; /* Largeur des barres */
+    height: 2px; /* Épaisseur des barres */
+    background-color: #D97706; /* Couleur de la barre */
+    display: block;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+#hamburger .line-2 {
+    margin-top: 5px; /* Espacement ajusté entre les deux barres à l'état initial */
+}
+
+#toggle_nav:checked ~ .flex .line-1 {
+    transform: translateY(5px) rotate(45deg); /* Ajustement précis pour la première diagonale */
+}
+
+#toggle_nav:checked ~ .flex .line-2 {
+    transform: translateY(-5px) rotate(-45deg); /* Ajustement précis pour la seconde diagonale */
+}

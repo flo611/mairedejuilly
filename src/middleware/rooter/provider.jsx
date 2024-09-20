@@ -3,7 +3,7 @@ import React from "react";
 import { createBrowserRouter, Outlet, Navigate } from "react-router-dom";
 import Dashboard from "../../app/pages/dashboard";
 import HomePage from "../../app/home";
-import Navbar from "../../app/components/layouts/navbar/desktop";
+import Navbar from "../../app/components/layouts/navbar/index";
 import Login from "../../app/pages/login";
 
 // Définir les routes
