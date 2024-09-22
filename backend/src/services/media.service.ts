@@ -5,12 +5,15 @@ import { Express } from 'express';
 
 const prisma = new PrismaClient();
 
-// Fonction pour uploader un fichier
-export const uploadFile = async (file: Express.Multer.File) => {
+// Fonction pour uploader un fichier avec catégorie
+export const uploadFile = async (file: Express.Multer.File, categorie: string) => {
   try {
-    // Vérifie que le fichier existe
     if (!file) {
       throw new Error("Aucun fichier n'a été téléchargé.");
+    }
+
+    if (!categorie) {
+      throw new Error("Aucune catégorie n'a été spécifiée.");
     }
 
     // Crée une entrée dans la base de données pour le fichier
@@ -20,25 +23,25 @@ export const uploadFile = async (file: Express.Multer.File) => {
         path: file.path,
         mimetype: file.mimetype,
         size: file.size,
+        categorie,  // Ajoute la catégorie ici
       },
     });
   } catch (error) {
     if (error instanceof Error) {
-      // Accède à la propriété `message` de l'erreur
       throw new Error(`Erreur lors du téléchargement du fichier : ${error.message}`);
     } else {
-      // Lance une erreur générique si l'erreur n'est pas de type `Error`
       throw new Error("Erreur inconnue lors du téléchargement du fichier.");
     }
   }
 };
 
-// Récupérer tous les fichiers
+// Fonction pour récupérer tous les fichiers
 export const getFiles = async () => {
   try {
     return await prisma.file.findMany();
   } catch (error) {
     if (error instanceof Error) {
+      console.error(`Erreur lors de la récupération des fichiers : ${error.message}`);
       throw new Error(`Erreur lors de la récupération des fichiers : ${error.message}`);
     } else {
       throw new Error("Erreur inconnue lors de la récupération des fichiers.");
@@ -46,7 +49,7 @@ export const getFiles = async () => {
   }
 };
 
-// Récupérer un fichier par ID
+// Fonction pour récupérer un fichier par ID
 export const getFileById = async (id: number) => {
   try {
     const file = await prisma.file.findUnique({
@@ -67,7 +70,7 @@ export const getFileById = async (id: number) => {
   }
 };
 
-// Supprimer un fichier par ID
+// Fonction pour supprimer un fichier par ID
 export const deleteFile = async (id: number) => {
   try {
     const file = await prisma.file.findUnique({ where: { id } });

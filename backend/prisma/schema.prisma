@@ -26,6 +26,7 @@ model Article {
 }
 model File {
   id        Int      @id @default(autoincrement())
+  categorie String  @db.VarChar(255)
   filename  String   @db.VarChar(255)
   path      String   @db.VarChar(255)
   mimetype  String   @db.VarChar(100)

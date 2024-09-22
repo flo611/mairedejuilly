@@ -1,17 +1,16 @@
 "use client";
+
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Import de useNavigate
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-
 const Login = () => {
-  // State pour stocker les valeurs des champs du formulaire et les erreurs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   
-  const navigate = useNavigate(); // Initialise useNavigate
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -31,27 +30,30 @@ const Login = () => {
 
     try {
       const response = await axios.post('http://localhost:3008/auth/login', { email, password });
+      const { token } = response.data;
+
+      localStorage.setItem('token', token);
       setSuccess('Login successful!');
       setError('');
 
-      // Utilise navigate pour rediriger vers le dashboard
-      navigate('/dashboard'); // Redirige vers le chemin correct
+      // Rediriger vers le dashboard
+      navigate('/dashboard');
     } catch (err) {
-      setError('Invalid credentials');
+      // Affiche le message d'erreur du serveur si disponible
+      const errorMessage = err.response?.data?.message || 'Invalid credentials';
+      setError(errorMessage);
       setSuccess('');
       console.error(err);
     }
   };
-  
+
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4 bg-red-700 text-white p-2">Login</h1>
 
-      {/* Afficher les messages de succès ou d'erreur */}
       {success && <div className="text-green-500">{success}</div>}
       {error && <div className="text-red-500">{error}</div>}
 
-      {/* Formulaire de connexion */}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="email" className="block mb-1 font-semibold">Email</label>
