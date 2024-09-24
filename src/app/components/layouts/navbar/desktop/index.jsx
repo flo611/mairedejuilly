@@ -3,6 +3,8 @@ import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom"; 
 import Image from "next/image"; 
 
+import { Link } from "react-router-dom";
+
 const NavbarDesktop = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); 
   const navigate = useNavigate(); 
@@ -41,9 +43,9 @@ const NavbarDesktop = () => {
         <div className="hidden lg:flex flex-row w-full py-5 justify-center items-center list-none text-amber-800 dark:text-slate-100 text-lg uppercase font-medium font-nunitoRegular">
           <ul className="w-full grid grid-cols-4">
             <div className="flex flex-row items-center justify-between col-span-3 pl-40">
-              <li><a href="/">Accueil</a></li>
-              <li>Compétences</li>
-              <li>Contact</li>
+              <li><Link to="/">Accueil</Link></li>
+              <li><Link to="/urbanisme">Urbanisme</Link></li> 
+              <li><Link to="./contact"> Contact </Link></li>
               <li>
                 <button
                   aria-label={isLoggedIn ? "Logout" : "Login"}

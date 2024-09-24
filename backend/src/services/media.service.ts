@@ -8,6 +8,7 @@ const prisma = new PrismaClient();
 // Fonction pour uploader un fichier avec catégorie
 export const uploadFile = async (file: Express.Multer.File, categorie: string) => {
   try {
+    // Vérification de la validité des données
     if (!file) {
       throw new Error("Aucun fichier n'a été téléchargé.");
     }
@@ -20,17 +21,58 @@ export const uploadFile = async (file: Express.Multer.File, categorie: string) =
     return await prisma.file.create({
       data: {
         filename: file.originalname,
-        path: file.path,
+        path: file.path, // Vérifiez que Multer enregistre bien le fichier ici
         mimetype: file.mimetype,
         size: file.size,
         categorie,  // Ajoute la catégorie ici
       },
     });
+  } catch (error: any) {
+    throw new Error(`Erreur lors du téléchargement du fichier : ${error.message || "Erreur inconnue"}`);
+  }
+};
+
+// Fonction pour mettre à jour un fichier
+export const updateFile = async (id: number, file?: Express.Multer.File, categorie?: string) => {
+  try {
+    const existingFile = await prisma.file.findUnique({ where: { id } });
+
+    if (!existingFile) {
+      throw new Error(`Fichier avec l'ID ${id} introuvable.`);
+    }
+
+    // Supprime l'ancien fichier du système de fichiers si un nouveau fichier est téléchargé
+    if (file) {
+      const oldFilePath = path.resolve(existingFile.path);
+      if (fs.existsSync(oldFilePath)) {
+        fs.unlinkSync(oldFilePath);
+      }
+
+      // Mettez à jour le fichier avec les nouvelles données
+      return await prisma.file.update({
+        where: { id },
+        data: {
+          filename: file.originalname,
+          path: file.path,
+          mimetype: file.mimetype,
+          size: file.size,
+          categorie: categorie || existingFile.categorie,  // Si la nouvelle catégorie n'est pas fournie, conserver l'ancienne
+        },
+      });
+    } else {
+      // Si aucun nouveau fichier n'est fourni, vous pouvez uniquement mettre à jour la catégorie
+      return await prisma.file.update({
+        where: { id },
+        data: {
+          categorie: categorie || existingFile.categorie,
+        },
+      });
+    }
   } catch (error) {
     if (error instanceof Error) {
-      throw new Error(`Erreur lors du téléchargement du fichier : ${error.message}`);
+      throw new Error(`Erreur lors de la mise à jour du fichier avec l'ID ${id} : ${error.message}`);
     } else {
-      throw new Error("Erreur inconnue lors du téléchargement du fichier.");
+      throw new Error("Erreur inconnue lors de la mise à jour du fichier.");
     }
   }
 };

@@ -8,14 +8,17 @@ export const uploadFileController = async (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Aucun fichier téléchargé.' });
     }
 
-    const file = await uploadFile(req.file);
-    res.status(201).json(file);
-  } catch (error) {
-    if (error instanceof Error) {
-      res.status(500).json({ error: error.message });
-    } else {
-      res.status(500).json({ error: 'Une erreur inconnue est survenue.' });
+    const { categorie } = req.body;
+
+    if (!categorie) {
+      return res.status(400).json({ error: 'La catégorie est requise.' });
     }
+
+    // On passe à la fois le fichier et la catégorie à uploadFile
+    const file = await uploadFile(req.file, categorie);
+    res.status(201).json(file);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message || 'Une erreur inconnue est survenue.' });
   }
 };
 

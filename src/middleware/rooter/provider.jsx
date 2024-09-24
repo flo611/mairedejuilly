@@ -1,9 +1,12 @@
 "use client";
 import React from "react";
 import { createBrowserRouter, Outlet, Navigate } from "react-router-dom";
-import Dashboard from "../../app/pages/dashboard";
-import HomePage from "../../app/home";
+
 import Navbar from "../../app/components/layouts/navbar/index";
+import HomePage from "../../app/home";
+import Urbanisme from "../../app/pages/urbanisme/index"
+
+import Dashboard from "../../app/pages/dashboard";
 import Login from "../../app/pages/login";
 
 // Définir les routes
@@ -13,13 +16,17 @@ export const router = createBrowserRouter([
     element: (
       <>
         <Navbar /> {/* Navbar toujours visible */}
-        <Outlet />  {/* Affiche les pages en fonction des routes */}
+        <Outlet /> 
       </>
     ),
     children: [
       {
         path: "/", 
         element: <HomePage />, // Page d'accueil
+      },
+      {
+        path: "urbanisme", 
+        element: <Urbanisme />, // Page Urbanisme
       },
       {
         path: "login", 
@@ -36,3 +43,4 @@ export const router = createBrowserRouter([
     ],
   },
 ]);
+

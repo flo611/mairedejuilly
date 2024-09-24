@@ -23,6 +23,8 @@ model Article {
   content String  @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+   files     File[]
 }
 model File {
   id        Int      @id @default(autoincrement())
@@ -32,4 +34,7 @@ model File {
   mimetype  String   @db.VarChar(100)
   size      Int
   createdAt DateTime @default(now())
+
+  article   Article? @relation(fields: [articleId], references: [id])
+  articleId Int?     // Clé étrangère pour associer un fichier à un article
 }
