@@ -11,7 +11,7 @@ import {
 const router = express.Router();
 
 router.use(cors({
-  origin: 'http://localhost:3000', // Ajuste l'origine si nécessaire
+  origin: process.env.ORIGIN , // Ajuste l'origine si nécessaire
   methods: ['POST', 'GET', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
 }));

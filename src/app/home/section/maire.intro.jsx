@@ -17,8 +17,8 @@
             </p>
         </div>
         <div className="grid gap-28 py-20 md:grid-cols-3 md:gap-12 lg:flex lg:justify-center lg:items-center">
-        <div className="group space-y-8 border-t-4 border-gray-100 dark:border-gray-800">
-            <div className="mx-auto -mt-16 h-32 w-32 rotate-45 overflow-hidden rounded-[2rem]">
+        <div className="group space-y-8 border-t-4 border-gray-500 dark:border-gray-800">
+            <div className="mx-auto mt-16 h-32 w-32 rotate-45 overflow-hidden rounded-[2rem] ">
                 <img
                     className="mx-auto h-full w-full -rotate-45 scale-125 object-cover transition duration-300 group-hover:scale-[1.4]"
                     src="/images/maire.png"
@@ -29,9 +29,11 @@
                 />
             </div>
             <div className="space-y-4 text-center">
-                <div className="w-full flex justify-center">
-                    <h4 className="text-2xl text-gray-700 dark:text-white py-2">Daniel HACQUIN</h4>
-                    <span className="block text-sm text-gray-500">Mairie de Juilly</span>
+                <div className="w-full flex flex-col  justify-center lg:flex-col">
+                    <h4 className="text-2xl text-yellow-900  py-2">Daniel HACQUIN</h4>
+                    <div>
+                    <span className="block text-sm text-yellow-900">Mairie de Juilly</span>
+                    </div>
                 </div>
                 <a href="#" className="mx-auto block w-max text-primary"></a>
             </div>

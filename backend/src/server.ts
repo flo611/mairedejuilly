@@ -9,7 +9,7 @@ const app = express();
 
 // Appliquer CORS globalement à toutes les routes
 app.use(cors({
-  origin: 'http://localhost:3000', // Autorisez l'origine de votre front-end
+  origin: process.env.ORIGIN, // Autorisez l'origine de votre front-end
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Autoriser les méthodes HTTP
   credentials: true, // Si vous utilisez des cookies ou des tokens dans les en-têtes Authorization
 }));

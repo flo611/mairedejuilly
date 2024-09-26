@@ -19,7 +19,7 @@ const upload = multer({ storage });
 
 // Configuration de CORS
 router.use(cors({
-  origin: 'http://localhost:3000',
+  origin: process.env.ORIGIN,
   methods: ['POST', 'GET', 'DELETE', 'PUT', 'OPTIONS'],
   credentials: true,
 }));

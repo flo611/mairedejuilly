@@ -48,8 +48,8 @@ const Login = () => {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4 bg-red-700 text-white p-2">Login</h1>
+    <div className="p-4 mt-20">
+      <h1 className="text-xl font-bold mb-4 bg-red-200 text-yellow-900 p-2">Login</h1>
 
       {success && <div className="text-green-500">{success}</div>}
       {error && <div className="text-red-500">{error}</div>}
@@ -79,7 +79,7 @@ const Login = () => {
         </div>
         <button
           type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded"
+          className="w-full py-3 px-6 text-center rounded-full transition bg-yellow-300 hover:bg-yellow-100 active:bg-yellow-400 focus:bg-yellow-300 sm:w-max"
         >
           Login
         </button>

@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Configurer CORS pour l'ensemble des routes d'authentification
 router.use(cors({
-  origin: 'http://localhost:3000', // Remplacez par l'URL de votre front-end
+  origin: process.env.ORIGIN,
   methods: ['POST', 'GET', 'OPTIONS'], // Autoriser les méthodes spécifiques
   credentials: true, // Autoriser l'envoi des cookies/credentials si nécessaire
 }));

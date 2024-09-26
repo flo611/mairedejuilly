@@ -9,6 +9,6 @@
     "skipLibCheck": true,                    // Ignorer la vérification des types des fichiers de définition
     "forceConsistentCasingInFileNames": true // Assurer la cohérence des noms de fichiers
   },
-  "include": ["src/**/*.ts"],                // Inclure les fichiers TypeScript
+  "include": ["src/**/*.ts", "src/types/**/*.d.ts"],
   "exclude": ["node_modules"]                // Exclure les fichiers dans node_modules
 }
