@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-import { FaUser, FaSignOutAlt } from "react-icons/fa";
-import { useNavigate } from "react-router-dom"; 
-
-import { Link } from "react-router-dom";
+import { FaUser, FaSignOutAlt, FaTachometerAlt } from "react-icons/fa"; // Importation de l'icône de tableau de bord
+import { useNavigate, Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token); // Vérifie si le token est présent
@@ -24,12 +23,13 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 z-10 w-full bg-red-300  ">
+    <nav className="fixed top-0 z-10 w-full bg-red-300">
       <div className="container m-auto px-2 md:px-12 lg:px-7">
         <div className="flex flex-wrap items-center justify-between py-3 gap-6 md:py-4 md:gap-0">
           <input type="checkbox" name="toggle_nav" id="toggle_nav" className="peer hidden" />
 
           <div className="w-full px-6 flex justify-between lg:w-max md:px-0 z-30">
+            {/* Affichage du logo et du nom de la mairie */}
             <a href="/" aria-label="logo" className="flex space-x-2 items-center">
               <img src="/images/Blason.svg.png" className="w-12" alt="logo mairie" width="144" height="133" />
               <span className="text-2xl font-bold text-yellow-900 hover:text-yellow-200">Mairie Juilly</span>
@@ -51,19 +51,32 @@ const Navbar = () => {
             <div className="text-gray-600 lg:pr-4 w-full">
               <ul className="tracking-wide font-medium text-sm flex flex-col gap-y-6 lg:gap-y-0 lg:flex-row w-full">
                 <li>
-                  <a href="/" className="block md:px-4 transition text-yellow-900  hover:text-yellow-200 ">
+                  <a href="/" className="block md:px-4 transition text-yellow-900 hover:text-yellow-200 ">
                     <span>Accueil</span>
                   </a>
                 </li>
                 <li>
-                  <Link to="/urbanisme" className="block md:px-4 transition text-yellow-900  hover:text-yellow-200 "> <span>Urbanisme</span>
+                  <Link to="/urbanisme" className="block md:px-4 transition text-yellow-900 hover:text-yellow-200 ">
+                    <span>Urbanisme</span>
                   </Link>
-                   
                 </li>
                 <li>
-                  <Link to="/contact" className="block md:px-4 transition text-yellow-900  hover:text-yellow-200 "><span>Contact</span> </Link>
-                    
+                  <Link to="/contact" className="block md:px-4 transition text-yellow-900 hover:text-yellow-200 ">
+                    <span>Contact</span>
+                  </Link>
                 </li>
+                {/* Lien vers le tableau de bord, affiché uniquement si connecté */}
+                {isLoggedIn && (
+                  <li>
+                    <Link to="/dashboard" className="block md:px-4 transition text-yellow-900 hover:text-yellow-200 ">
+                      <span className="flex items-center">
+                        {/* Icône de tableau de bord */}
+                        <FaTachometerAlt className="h-5 w-5 mr-1" />
+                        Dashboard
+                      </span>
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
 
@@ -86,6 +99,5 @@ const Navbar = () => {
     </nav>
   );
 };
-
 
 export default Navbar;

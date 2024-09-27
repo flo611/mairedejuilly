@@ -8,6 +8,7 @@ import Urbanisme from "../../app/pages/urbanisme/index"
 
 import Dashboard from "../../app/pages/dashboard";
 import Login from "../../app/pages/login";
+import Contact from "../../app/pages/contact"
 
 // Définir les routes
 export const router = createBrowserRouter([
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
       {
         path: "dashboard", 
         element: <Dashboard />, // Tableau de bord
+      },
+      {
+        path: "contact", 
+        element: <Contact />, // Contact
       },
       {
         path: "*", 
