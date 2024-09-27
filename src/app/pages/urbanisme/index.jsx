@@ -66,9 +66,9 @@ const Urbanisme = () => {
 
   return (
     <div>
-      <div className="flex flex-wrap gap-4 mt-40">
+      <div className="flex flex-wrap gap-4 pt-32">
         {items.map((item) => (
-          <Card key={item.id} className="w-full max-w-[26rem] shadow-lg lg:mx-10">
+          <Card key={item.id} className="w-full max-w-[26rem] shadow-lg my-4 lg:mx-10">
             <CardHeader floated={false} color="blue-gray">
               <img
                 src={item.type === 'media' ? item.fileurl : 'fallback-image-url'} // Utiliser l'URL de l'image pour les médias

@@ -7,17 +7,17 @@
                 <section>
         <div classname="py-20">
         <div classname="container mx-auto px-6 text-center md:px-12 ">
-        <div classname="mb-16">
-            <h2 classname="mb-4 text-center text-2xl font-bold text-gray-800 dark:text-white md:text-4xl ">
+        <div classname="mb-16 lg:w-full lg:mx-auto lg:flex lg:flex-row lg:justify-center">
+            <h2 classname="mb-4 text-center text-2xl font-bold  md:text-4xl lg:w-full  lg:flex lg:flex-row lg:justify-center  ">
             Tailus blocks leadership
             </h2>
-            <p classname="text-gray-600 dark:text-gray-300 lg:mx-auto lg:w-8/12">
+            <p classname=" lg:w-full lg:mx-auto lg:flex lg:flex-row lg:justify-center">
             Tailus prides itself not only on award-winning technology, but also on the talent of its
             people of some of the brightest minds and most experienced executives in business.
             </p>
         </div>
         <div className="grid gap-28 py-20 md:grid-cols-3 md:gap-12 lg:flex lg:justify-center lg:items-center">
-        <div className="group space-y-8 border-t-4 border-gray-500 dark:border-gray-800">
+        <div className="group space-y-8 border-t-4 border-yellow-300 dark:border-gray-800">
             <div className="mx-auto mt-16 h-32 w-32 rotate-45 overflow-hidden rounded-[2rem] ">
                 <img
                     className="mx-auto h-full w-full -rotate-45 scale-125 object-cover transition duration-300 group-hover:scale-[1.4]"

@@ -4,11 +4,11 @@ import { createBrowserRouter, Outlet, Navigate } from "react-router-dom";
 
 import Navbar from "../../app/components/layouts/navbar/index";
 import HomePage from "../../app/home";
-import Urbanisme from "../../app/pages/urbanisme/index"
-
+import Urbanisme from "../../app/pages/urbanisme/index";
 import Dashboard from "../../app/pages/dashboard";
 import Login from "../../app/pages/login";
-import Contact from "../../app/pages/contact"
+import Contact from "../../app/pages/contact";
+import Main from "../../app/components/layouts/main"; // Importez le composant Main ici
 
 // Définir les routes
 export const router = createBrowserRouter([
@@ -17,35 +17,36 @@ export const router = createBrowserRouter([
     element: (
       <>
         <Navbar /> {/* Navbar toujours visible */}
-        <Outlet /> 
+        <Main> {/* Ajoutez le composant Main ici */}
+          <Outlet /> {/* Outlet pour rendre les pages */}
+        </Main>
       </>
     ),
     children: [
       {
-        path: "/", 
+        path: "/",
         element: <HomePage />, // Page d'accueil
       },
       {
-        path: "urbanisme", 
+        path: "urbanisme",
         element: <Urbanisme />, // Page Urbanisme
       },
       {
-        path: "login", 
+        path: "login",
         element: <Login />, // Page de connexion
       },
       {
-        path: "dashboard", 
+        path: "dashboard",
         element: <Dashboard />, // Tableau de bord
       },
       {
-        path: "contact", 
+        path: "contact",
         element: <Contact />, // Contact
       },
       {
-        path: "*", 
-        element: <Navigate to="/" replace /> // Redirection vers la page d'accueil pour les routes inconnues
-      }
+        path: "*",
+        element: <Navigate to="/" replace />, // Redirection vers la page d'accueil pour les routes inconnues
+      },
     ],
   },
 ]);
-
