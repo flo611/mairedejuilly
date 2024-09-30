@@ -3,18 +3,6 @@
 @tailwind utilities;
 
 
-.background-container {
-    background-image: url('/images/background.jpeg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;  /* Le fond est fixé et ne crée pas de trous blancs */
-    min-height: 100vh;  /* Garde la hauteur minimale à 100% de la fenêtre */
-    width: 100%;        /* Utilise 100% de la largeur */
-    position: relative; /* Nécessaire pour la gestion des overlays */
-}
-
-
 
 
 

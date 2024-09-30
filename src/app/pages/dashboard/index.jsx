@@ -7,6 +7,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
 
+import MyCalendar from "../../components/layouts/calendar"
+
 const TABLE_HEAD = ["Image", "Type", "Nom", "Titre / Contenu", "Catégorie", "Actions"];
 
 const Dashboard = () => {
@@ -34,8 +36,59 @@ const Dashboard = () => {
   };
 
   const handleAddItem = async () => {
-    // ... (pas de changements ici, gardez votre code existant pour handleAddItem)
+    // Vérifiez si le type est 'media' et si un fichier a été sélectionné
+    if (newItem.type === 'media' && newFile) {
+      const formData = new FormData();
+      // Ajoutez le fichier, le contenu et la catégorie au FormData
+      formData.append('file', newFile);
+      formData.append('content', newItem.content);
+      formData.append('categorie', newItem.categorie);
+  
+      try {
+        // Envoyez une requête POST pour télécharger le fichier
+        const response = await axios.post('http://localhost:3008/api/media/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+  
+        // Vérifiez que la réponse contient l'URL de l'image
+        if (response.data.file && response.data.file.url) {
+          // Mettez à jour l'état avec le nouvel élément ajouté
+          setItems([...items, {
+            ...response.data.file,
+            content: newItem.content,
+            categorie: newItem.categorie,
+            type: 'media'
+          }]);
+        } else {
+          console.error('Le fichier téléchargé n\'a pas d\'URL valide');
+        }
+  
+        // Réinitialisez le nouvel élément après l'ajout
+        resetNewItem();
+      } catch (error) {
+        console.error('Erreur lors du téléchargement du fichier:', error);
+      }
+    } 
+    // Vérifiez si le type est 'article'
+    else if (newItem.type === 'article') {
+      try {
+        // Envoyez une requête POST pour ajouter un nouvel article
+        const response = await axios.post('http://localhost:3008/api/articles', {
+          title: newItem.title,
+          content: newItem.content,
+          categorie: newItem.categorie
+        });
+  
+        // Mettez à jour l'état avec le nouvel article ajouté
+        setItems([...items, { ...response.data, type: 'article' }]);
+        // Réinitialisez le nouvel élément après l'ajout
+        resetNewItem();
+      } catch (error) {
+        console.error('Erreur lors de l\'ajout de l\'article:', error);
+      }
+    }
   };
+  
 
   const handleEditItem = (item) => {
     setEditingItemId(item.id);
@@ -97,11 +150,11 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="top-0 flex flex-col items-center justify-center min-h-screen bg-red-200 my-40">
+    <div className="top-0 flex flex-col items-center justify-center min-h-screen  my-40">
       <h2 className="text-3xl font-bold mb-4 text-yellow-900">Tableau de Bord</h2>
       <p className='text-yellow-900'>Bienvenue sur le tableau de bord de l'administrateur ou du modérateur !</p>
 
-      <Card className="h-full w-full overflow-scroll mb-4 p-4 bg-red-200">
+      <Card className="h-full w-full overflow-scroll mb-4 p-4 ">
         {/* Formulaire pour ajouter un média ou un article */}
         <TextField
           select
@@ -301,6 +354,7 @@ const Dashboard = () => {
           </tbody>
         </table>
       </Card>
+      <MyCalendar/>
     </div>
   );
 };
