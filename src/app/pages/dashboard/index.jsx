@@ -34,34 +34,7 @@ const Dashboard = () => {
   };
 
   const handleAddItem = async () => {
-    if (newItem.type === 'media' && newFile) {
-      const formData = new FormData();
-      formData.append('file', newFile);
-      formData.append('content', newItem.content);
-      formData.append('categorie', newItem.categorie);
-
-      try {
-        const response = await axios.post('http://localhost:3008/api/media/upload', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-        setItems([...items, { ...response.data.file, content: newItem.content, categorie: newItem.categorie, type: 'media' }]);
-        resetNewItem();
-      } catch (error) {
-        console.error('Error uploading file:', error);
-      }
-    } else if (newItem.type === 'article') {
-      try {
-        const response = await axios.post('http://localhost:3008/api/articles', {
-          title: newItem.title,
-          content: newItem.content,
-          categorie: newItem.categorie
-        });
-        setItems([...items, { ...response.data, type: 'article' }]);
-        resetNewItem();
-      } catch (error) {
-        console.error('Error adding article:', error);
-      }
-    }
+    // ... (pas de changements ici, gardez votre code existant pour handleAddItem)
   };
 
   const handleEditItem = (item) => {
@@ -77,38 +50,23 @@ const Dashboard = () => {
 
   const handleSaveItem = async (id, type) => {
     try {
-      if (type === 'media') {
-        const formData = new FormData();
-        if (newFile) {
-          formData.append('file', newFile); // Inclure le nouveau fichier si présent
-        }
-        formData.append('content', newItem.content);
-        formData.append('categorie', newItem.categorie);
-
-        const response = await axios.put(`http://localhost:3008/api/media/${id}`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
-
-        // Mettre à jour les éléments dans l'état
-        setItems(items.map((item) => (
-          item.id === id
-            ? { ...item, filename: newFile ? newFile.name : item.filename, content: newItem.content, categorie: newItem.categorie, url: response.data.url }
-            : item
-        )));
-      } else if (type === 'article') {
-        const response = await axios.put(`http://localhost:3008/api/articles/${id}`, {
-          title: newItem.title,
-          content: newItem.content,
-          categorie: newItem.categorie
-        });
-
-        // Mettre à jour les articles dans l'état
-        setItems(items.map((item) => (
-          item.id === id
-            ? { ...item, title: response.data.title, content: response.data.content, categorie: response.data.categorie }
-            : item
-        )));
+      const formData = new FormData();
+      if (newFile) {
+        formData.append('file', newFile);
       }
+      formData.append('content', newItem.content);
+      formData.append('categorie', newItem.categorie);
+      const endpoint = type === 'media' ? `http://localhost:3008/api/media/${id}` : `http://localhost:3008/api/articles/${id}`;
+
+      const response = await axios.put(endpoint, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      setItems(items.map((item) => (
+        item.id === id
+          ? { ...item, filename: newFile ? newFile.name : item.filename, content: newItem.content, categorie: newItem.categorie, url: response.data.url }
+          : item
+      )));
 
       setEditingItemId(null);
       resetNewItem();
@@ -118,18 +76,21 @@ const Dashboard = () => {
   };
 
   const handleDeleteItem = async (id, type) => {
-    try {
-      if (type === 'media') {
-        await axios.delete(`http://localhost:3008/api/media/${id}`);
-      } else if (type === 'article') {
-        await axios.delete(`http://localhost:3008/api/articles/${id}`);
-      }
-      setItems(items.filter(item => item.id !== id));
-    } catch (error) {
-      console.error('Error deleting item:', error);
-    }
-  };
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer cet élément ?")) {
+        try {
+            const endpoint = type === 'media' ? `http://localhost:3008/api/media/${id}` : `http://localhost:3008/api/articles/${id}`;
+            
+            // Appel à l'API pour supprimer l'élément
+            await axios.delete(endpoint);
 
+            // Mettre à jour l'état local pour supprimer l'élément de l'interface utilisateur
+            setItems(items.filter(item => item.id !== id));
+        } catch (error) {
+            console.error('Error deleting item:', error);
+            alert("Une erreur s'est produite lors de la suppression de l'élément.");
+        }
+    }
+};
   const resetNewItem = () => {
     setNewItem({ type: '', title: '', content: '', categorie: '' });
     setNewFile(null);
@@ -140,24 +101,22 @@ const Dashboard = () => {
       <h2 className="text-3xl font-bold mb-4 text-yellow-900">Tableau de Bord</h2>
       <p className='text-yellow-900'>Bienvenue sur le tableau de bord de l'administrateur ou du modérateur !</p>
 
-      {/* Section Ajouter un média ou un article */}
-        <Card className="h-full w-full overflow-scroll mb-4 p-4 bg-red-200">
+      <Card className="h-full w-full overflow-scroll mb-4 p-4 bg-red-200">
+        {/* Formulaire pour ajouter un média ou un article */}
         <TextField
-           select
-            label="Type"
-            value={newItem.type}
-            onChange={(e) => setNewItem({ ...newItem, type: e.target.value })}
-            variant="outlined"
-            className="mr-2  text-yellow-900"
-            SelectProps={{ native: true }}
-            InputLabelProps={{ shrink: true }} // Ajout du shrink pour que le label reste visible
-          >
-            <option value="">
-            Choisissez un type
-            </option>
-            <option value="media">Média</option>
-            <option value="article">Article</option>
-         </TextField>
+          select
+          label="Type"
+          value={newItem.type}
+          onChange={(e) => setNewItem({ ...newItem, type: e.target.value })}
+          variant="outlined"
+          className="mr-2  text-yellow-900"
+          SelectProps={{ native: true }}
+          InputLabelProps={{ shrink: true }}
+        >
+          <option value="">Choisissez un type</option>
+          <option value="media">Média</option>
+          <option value="article">Article</option>
+        </TextField>
 
         {newItem.type === 'media' && (
           <>
@@ -178,7 +137,9 @@ const Dashboard = () => {
             <input
               type="file"
               onChange={(e) => {
-                setNewFile(e.target.files[0]);
+                const file = e.target.files[0];
+                setNewFile(file); // Mettez à jour l'état avec le fichier sélectionné
+                setNewItem({ ...newItem, mediaFile: file }); // Inclure le fichier dans newItem
               }}
             />
             <Button onClick={handleAddItem} variant="contained" color="primary" className="ml-2">
@@ -219,7 +180,6 @@ const Dashboard = () => {
         )}
       </Card>
 
-      {/* Tableau des médias/articles */}
       <Card className="h-full w-full overflow-scroll mb-4 p-4">
         <table className="min-w-full">
           <thead>
@@ -245,26 +205,22 @@ const Dashboard = () => {
                         onChange={(e) => {
                           const file = e.target.files[0];
                           if (file) {
-                            const url = URL.createObjectURL(file);
-                            setNewItem({ ...newItem, mediaFile: file, url });
+                            setNewFile(file);
+                            setNewItem({ ...newItem, mediaFile: file }); // Inclure le fichier dans newItem pour une utilisation future
                           }
                         }}
                       />
-                      {newItem.url && (
-                        <img src={newItem.url} alt={newItem.filename} width="100" />
+                      {newFile && (
+                        <img src={URL.createObjectURL(newFile)} alt={newFile.name} width="100" /> 
                       )}
                     </>
                   ) : (
-                    item.type === 'media' ? (
-                      <img src={item.url} alt={item.filename} width="100" />
-                    ) : null
+                    item.type === 'media' && <img src={item.url} alt={item.filename} width="100" />
                   )}
                 </td>
 
-                {/* Champ de type */}
                 <td>{item.type}</td>
 
-                {/* Titre - modifiable */}
                 <td>
                   {editingItemId === item.id ? (
                     <TextField
@@ -277,7 +233,6 @@ const Dashboard = () => {
                   )}
                 </td>
 
-                {/* Contenu - modifiable */}
                 <td>
                   {editingItemId === item.id ? (
                     <TextField
@@ -290,7 +245,6 @@ const Dashboard = () => {
                   )}
                 </td>
 
-                {/* Catégorie - modifiable */}
                 <td>
                   {editingItemId === item.id ? (
                     <TextField
@@ -303,7 +257,6 @@ const Dashboard = () => {
                   )}
                 </td>
 
-                {/* Boutons d'action */}
                 <td>
                   {editingItemId === item.id ? (
                     <>
